@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>المسبحة الإلكترونية</title>
+    <title>المسبحة والمصحف الرقمي</title>
     <style>
-        /* الاعتماد الكلي على الأبيض، الأسود، والبرتقالي */
+        /* التكوين اللوني القياسي المعتمد */
         :root {
             --bg-color: #FFFFFF;
             --text-color: #000000;
@@ -26,7 +26,7 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             height: 100vh;
-            overflow: hidden;
+            overflow: hidden; /* يمنع التمرير العام للصفحة */
             display: flex;
             justify-content: center;
         }
@@ -35,25 +35,38 @@
             width: 100%;
             max-width: 450px;
             height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 20px;
-            cursor: pointer;
+            position: relative;
         }
 
-        /* 1. شريط التحكم العلوي (يحاكي الصورة) */
+        /* نظام التوجيه المزدوج للواجهات */
+        .view {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            width: 100%;
+            padding: 20px;
+        }
+
+        .view.active {
+            display: flex;
+        }
+
+        /* ====================
+           واجهة المسبحة
+           ==================== */
         .top-controls {
             display: flex;
-            justify-content: flex-start;
-            gap: 15px;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
             margin-bottom: 20px;
         }
 
-        /* زر الهدف الدائري */
         .target-btn {
             width: 55px;
             height: 55px;
+            flex-shrink: 0;
             border-radius: 50%;
             background-color: var(--bg-color);
             border: 3px solid var(--border-color);
@@ -67,24 +80,38 @@
             z-index: 10;
         }
 
-        /* زر التصفير العلوي */
-        .reset-btn {
-            padding: 0 20px;
+        .top-btn {
+            flex-grow: 1;
             height: 55px;
             border-radius: 27.5px;
-            background-color: var(--bg-color);
-            border: 3px solid var(--border-color);
-            color: var(--text-color);
             font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
+            border: 3px solid var(--border-color);
             z-index: 10;
         }
 
-        /* 2. صندوق العبارة (إطار واضح وخط كبير) */
+        .reset-btn {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .quran-btn {
+            background-color: var(--accent-color);
+            color: #FFFFFF;
+        }
+
+        .tap-area {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
         .dhikr-container {
             width: 100%;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .dhikr-dropdown {
@@ -96,16 +123,15 @@
             text-align-last: center;
             background-color: var(--bg-color);
             color: var(--text-color);
-            border: 4px solid var(--border-color); /* إطار واضح */
+            border: 4px solid var(--border-color);
             border-radius: 15px;
             outline: none;
-            appearance: none; /* إخفاء سهم القائمة */
+            appearance: none;
             cursor: pointer;
             white-space: normal;
             line-height: 1.5;
         }
 
-        /* 3. العداد المركزي */
         .counter-display {
             flex-grow: 1;
             display: flex;
@@ -117,7 +143,7 @@
             width: 280px;
             height: 280px;
             background-color: var(--bg-color);
-            border: 12px solid var(--accent-color); /* برتقالي */
+            border: 12px solid var(--accent-color);
             border-radius: 50%;
             display: flex;
             justify-content: center;
@@ -132,7 +158,6 @@
             transform: scale(0.97);
         }
 
-        /* 4. الإحصائيات السفلية */
         .statistics-bar {
             width: 100%;
             display: flex;
@@ -153,46 +178,125 @@
         }
 
         .stat-value {
-            color: var(--accent-color); /* تمييز الأرقام بالبرتقالي */
+            color: var(--accent-color);
+        }
+
+        /* ====================
+           واجهة المصحف
+           ==================== */
+        .quran-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--border-color);
+            margin-bottom: 15px;
+        }
+
+        .nav-btn {
+            background-color: var(--bg-color);
+            border: 3px solid var(--border-color);
+            color: var(--text-color);
+            padding: 10px 15px;
+            font-weight: bold;
+            font-size: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .nav-btn.primary {
+            background-color: var(--accent-color);
+            color: #FFFFFF;
+            border-color: var(--accent-color);
+        }
+
+        .quran-image-container {
+            flex-grow: 1;
+            overflow-y: auto; /* يسمح بالتمرير العمودي لصفحة المصحف فقط */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            border: 4px solid var(--border-color);
+            border-radius: 15px;
+            background-color: var(--bg-color);
+            margin-bottom: 15px;
+        }
+
+        .quran-image-container img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .quran-controls {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 5px;
         }
     </style>
 </head>
 <body>
-    <div class="app-container" id="tapArea">
+    <div class="app-container">
         
-        <header class="top-controls">
-            <button id="targetBtn" class="target-btn">∞</button>
-            <button id="resetBtn" class="reset-btn">تصفير</button>
-        </header>
+        <div id="masbahaView" class="view active">
+            <header class="top-controls">
+                <button id="targetBtn" class="target-btn">∞</button>
+                <button id="resetBtn" class="top-btn reset-btn">تصفير</button>
+                <button id="openQuranBtn" class="top-btn quran-btn">المصحف</button>
+            </header>
 
-        <div class="dhikr-container">
-            <select id="dhikrSelect" class="dhikr-dropdown">
-                <option value="سُبْحَانَ اللَّهِ وَبِحَمْدِهِ">سُبْحَانَ اللَّهِ وَبِحَمْدِهِ ▼</option>
-                <option value="أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ">أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ ▼</option>
-                <option value="اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ">اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ ▼</option>
-                <option value="لَا إِلَهَ إِلَّا اللَّهُ">لَا إِلَهَ إِلَّا اللَّهُ ▼</option>
-                <option value="لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ">لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ ▼</option>
-                <option value="حَسْبِيَ اللَّهُ وَنِعْمَ الْوَكِيلُ">حَسْبِيَ اللَّهُ وَنِعْمَ الْوَكِيلُ ▼</option>
-                <option value="الْحَمْدُ لِلَّهِ">الْحَمْدُ لِلَّهِ ▼</option>
-                <option value="اللَّهُ أَكْبَرُ">اللَّهُ أَكْبَرُ ▼</option>
-                <option value="custom">عبارة مخصصة... ▼</option>
-            </select>
+            <div id="tapArea" class="tap-area">
+                <div class="dhikr-container">
+                    <select id="dhikrSelect" class="dhikr-dropdown">
+                        <option value="سُبْحَانَ اللَّهِ وَبِحَمْدِهِ">سُبْحَانَ اللَّهِ وَبِحَمْدِهِ ▼</option>
+                        <option value="أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ">أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ ▼</option>
+                        <option value="اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ">اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ ▼</option>
+                        <option value="لَا إِلَهَ إِلَّا اللَّهُ">لَا إِلَهَ إِلَّا اللَّهُ ▼</option>
+                        <option value="لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ">لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ ▼</option>
+                        <option value="حَسْبِيَ اللَّهُ وَنِعْمَ الْوَكِيلُ">حَسْبِيَ اللَّهُ وَنِعْمَ الْوَكِيلُ ▼</option>
+                        <option value="الْحَمْدُ لِلَّهِ">الْحَمْدُ لِلَّهِ ▼</option>
+                        <option value="اللَّهُ أَكْبَرُ">اللَّهُ أَكْبَرُ ▼</option>
+                        <option value="custom">عبارة مخصصة... ▼</option>
+                    </select>
+                </div>
+
+                <main class="counter-display">
+                    <div class="circle" id="mainCounter">0</div>
+                </main>
+
+                <footer class="statistics-bar">
+                    <div class="stat-box">الإجمالي : <span id="currentTotal" class="stat-value">0</span></div>
+                    <div class="stat-box">المجموع الكلي : <span id="globalTotal" class="stat-value">0</span></div>
+                </footer>
+            </div>
         </div>
 
-        <main class="counter-display">
-            <div class="circle" id="mainCounter">0</div>
-        </main>
-
-        <footer class="statistics-bar">
-            <div class="stat-box">الإجمالي : <span id="currentTotal" class="stat-value">0</span></div>
-            <div class="stat-box">المجموع الكلي : <span id="globalTotal" class="stat-value">0</span></div>
-        </footer>
+        <div id="quranView" class="view">
+            <header class="quran-header">
+                <button id="backToMasbahaBtn" class="nav-btn">العودة</button>
+                <span id="currentPageDisplay" style="font-weight: bold; font-size: 1.1rem; color: var(--text-color);">صفحة: 1</span>
+                <button id="bookmarkBtn" class="nav-btn primary">إضافة فاصل</button>
+            </header>
+            
+            <div class="quran-image-container" id="quranScrollArea">
+                <img id="quranImage" src="" alt="صفحة المصحف">
+            </div>
+            
+            <footer class="quran-controls">
+                <button id="prevPageBtn" class="nav-btn">الصفحة السابقة</button>
+                <button id="nextPageBtn" class="nav-btn primary">الصفحة التالية</button>
+            </footer>
+        </div>
 
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // تعريف عناصر الواجهة
+            // المعرفات الأساسية للواجهات
+            const masbahaView = document.getElementById('masbahaView');
+            const quranView = document.getElementById('quranView');
+
+            // معرفات المسبحة
             const tapArea = document.getElementById('tapArea');
             const dhikrSelect = document.getElementById('dhikrSelect');
             const mainCounterEl = document.getElementById('mainCounter');
@@ -200,23 +304,65 @@
             const globalTotalEl = document.getElementById('globalTotal');
             const resetBtn = document.getElementById('resetBtn');
             const targetBtn = document.getElementById('targetBtn');
+            const openQuranBtn = document.getElementById('openQuranBtn');
 
-            // المتغيرات والبيانات
+            // معرفات المصحف
+            const backToMasbahaBtn = document.getElementById('backToMasbahaBtn');
+            const quranImage = document.getElementById('quranImage');
+            const nextPageBtn = document.getElementById('nextPageBtn');
+            const prevPageBtn = document.getElementById('prevPageBtn');
+            const bookmarkBtn = document.getElementById('bookmarkBtn');
+            const currentPageDisplay = document.getElementById('currentPageDisplay');
+            const quranScrollArea = document.getElementById('quranScrollArea');
+
+            // ==================== المعالجة الصوتية ====================
+            let audioCtx;
+            const initAudio = () => {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+            };
+
+            const playFeedback = (type) => {
+                if (!audioCtx) return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                
+                if (type === 'tick') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.05);
+                } else if (type === 'alert') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.3);
+                }
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+            };
+
+            const triggerVibration = (pattern = 50) => {
+                if (navigator.vibrate) navigator.vibrate(pattern);
+            };
+
+            // ==================== منطق عمل المسبحة ====================
             let currentDhikr = dhikrSelect.value;
-            let counts = JSON.parse(localStorage.getItem('dhikrCounts_v3')) || {};
-            let globalTotal = parseInt(localStorage.getItem('globalTotal_v3')) || 0;
+            let counts = JSON.parse(localStorage.getItem('dhikrCounts_final')) || {};
+            let globalTotal = parseInt(localStorage.getItem('globalTotal_final')) || 0;
             let currentSessionCount = 0;
             
-            // متغيرات نظام الهدف (Target System)
-            const targetOptions = [0, 33, 99]; // 0 تعني مفتوح (بدون هدف)
-            let currentTargetIndex = 0;
+            const targetOptions = [0, 33, 99];
+            let currentTargetIndex = parseInt(localStorage.getItem('masbahaTargetIndex_v1')) || 0;
             let currentTarget = targetOptions[currentTargetIndex];
 
-            // تهيئة الذكر الحالي
             if (!counts[currentDhikr]) counts[currentDhikr] = 0;
 
-            // دالة تحديث الواجهة
-            const updateUI = () => {
+            const updateMasbahaUI = () => {
                 requestAnimationFrame(() => {
                     mainCounterEl.innerText = currentSessionCount;
                     currentTotalEl.innerText = counts[currentDhikr];
@@ -225,27 +371,19 @@
                 });
             };
 
-            // دالة حفظ البيانات
-            const saveData = () => {
-                localStorage.setItem('dhikrCounts_v3', JSON.stringify(counts));
-                localStorage.setItem('globalTotal_v3', globalTotal);
+            const saveMasbahaData = () => {
+                localStorage.setItem('dhikrCounts_final', JSON.stringify(counts));
+                localStorage.setItem('globalTotal_final', globalTotal);
             };
 
-            // دالة الاهتزاز
-            const triggerVibration = (pattern = 50) => {
-                if (navigator.vibrate) navigator.vibrate(pattern);
-            };
+            updateMasbahaUI();
 
-            updateUI();
-
-            // 1. منطق النقر والعد
             tapArea.addEventListener('click', (e) => {
-                // منع العد إذا تم النقر على الأزرار أو القائمة
+                initAudio();
                 if (e.target.closest('select, button')) return;
 
-                // التحقق مما إذا كان قد وصل للهدف في النقرة السابقة
                 if (currentTarget !== 0 && currentSessionCount === currentTarget) {
-                    currentSessionCount = 1; // تصفير العداد وبدء دورة جديدة
+                    currentSessionCount = 1;
                 } else {
                     currentSessionCount++;
                 }
@@ -253,17 +391,19 @@
                 counts[currentDhikr]++;
                 globalTotal++;
 
-                // التنبيه عند الوصول للهدف المختار
                 if (currentTarget !== 0 && currentSessionCount === currentTarget) {
-                    triggerVibration([300, 100, 300]); // اهتزاز مميز وطويل
+                    triggerVibration([300, 100, 300]);
+                    playFeedback('alert');
+                } else {
+                    playFeedback('tick');
                 }
 
-                saveData();
-                updateUI();
+                saveMasbahaData();
+                updateMasbahaUI();
             });
 
-            // 2. تغيير الذكر
             dhikrSelect.addEventListener('change', (e) => {
+                initAudio();
                 triggerVibration(100);
                 const selectedValue = e.target.value;
                 
@@ -286,24 +426,23 @@
 
                 currentSessionCount = 0;
                 if (!counts[currentDhikr]) counts[currentDhikr] = 0;
-                updateUI();
+                updateMasbahaUI();
             });
 
-            // 3. تغيير الهدف (33 / 99 / مفتوح)
             targetBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
+                initAudio();
                 triggerVibration(50);
                 currentTargetIndex = (currentTargetIndex + 1) % targetOptions.length;
                 currentTarget = targetOptions[currentTargetIndex];
-                
-                // إعادة ضبط العداد المركزي ليتناسب مع الهدف الجديد
+                localStorage.setItem('masbahaTargetIndex_v1', currentTargetIndex);
                 currentSessionCount = 0; 
-                updateUI();
+                updateMasbahaUI();
             });
 
-            // 4. خيارات التصفير
             resetBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
+                initAudio();
                 triggerVibration(100);
                 const resetChoice = prompt("اختر نوع التصفير:\n1 - العداد المركزي فقط\n2 - إجمالي الذكر الحالي\n3 - مسح كافة البيانات نهائياً", "1");
                 if (resetChoice === null) return;
@@ -318,19 +457,63 @@
                         currentSessionCount = 0;
                         break;
                     case "3":
-                        if(confirm("هل أنت متأكد من مسح جميع السجلات؟")) {
+                        if(confirm("تحذير: هل أنت متأكد من مسح جميع السجلات؟")) {
                             counts = {};
                             globalTotal = 0;
                             currentSessionCount = 0;
                             counts[currentDhikr] = 0;
-                            localStorage.removeItem('dhikrCounts_v3');
-                            localStorage.removeItem('globalTotal_v3');
+                            localStorage.removeItem('dhikrCounts_final');
+                            localStorage.removeItem('globalTotal_final');
                         }
                         break;
                     default: return;
                 }
-                if (resetChoice.trim() !== "3") saveData();
-                updateUI();
+                if (resetChoice.trim() !== "3") saveMasbahaData();
+                updateMasbahaUI();
+            });
+
+            // ==================== منطق عمل المصحف ====================
+            let currentQuranPage = parseInt(localStorage.getItem('quranBookmark_v1')) || 1;
+
+            const renderQuranPage = (pageNumber) => {
+                // إضافة الأصفار للحصول على صيغة رقمية من 3 خانات (مثل 001, 045, 604)
+                const paddedPage = String(pageNumber).padStart(3, '0');
+                // استدعاء الصفحة من شبكة CDN لجامعة الملك سعود
+                quranImage.src = `https://quran.ksu.edu.sa/png_big/${paddedPage}.png`;
+                currentPageDisplay.innerText = `صفحة: ${pageNumber}`;
+                quranScrollArea.scrollTop = 0; // إعادة التمرير للأعلى عند تغيير الصفحة
+            };
+
+            openQuranBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                masbahaView.classList.remove('active');
+                quranView.classList.add('active');
+                renderQuranPage(currentQuranPage);
+            });
+
+            backToMasbahaBtn.addEventListener('click', () => {
+                quranView.classList.remove('active');
+                masbahaView.classList.add('active');
+            });
+
+            nextPageBtn.addEventListener('click', () => {
+                if (currentQuranPage < 604) {
+                    currentQuranPage++;
+                    renderQuranPage(currentQuranPage);
+                }
+            });
+
+            prevPageBtn.addEventListener('click', () => {
+                if (currentQuranPage > 1) {
+                    currentQuranPage--;
+                    renderQuranPage(currentQuranPage);
+                }
+            });
+
+            bookmarkBtn.addEventListener('click', () => {
+                localStorage.setItem('quranBookmark_v1', currentQuranPage);
+                triggerVibration(100);
+                alert(`تم حفظ الفاصل بنجاح عند الصفحة رقم (${currentQuranPage}). سيتم فتحها تلقائياً في المرة القادمة.`);
             });
         });
     </script>
