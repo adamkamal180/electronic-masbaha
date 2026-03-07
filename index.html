@@ -3,29 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>المسبحة الإلكترونية - المظهر العصري</title>
+    <title>المسبحة الإلكترونية</title>
     <style>
-        /* تعريف لوحة الألوان الجديدة */
+        /* الاعتماد الكلي على الأبيض، الأسود، والبرتقالي */
         :root {
-            --bg-color: #FFFFFF;        /* أبيض للخلفية الأساسية */
-            --text-primary: #000000;   /* أسود للنصوص */
-            --accent-color: #FF8C00;   /* برتقالي داكن للعناصر النشطة */
-            --element-bg: #FFFFFF;      /* أبيض لخلفية العناصر */
-            --border-color: #000000;   /* أسود للحدود */
+            --bg-color: #FFFFFF;
+            --text-color: #000000;
+            --accent-color: #FF8C00;
+            --border-color: #000000;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            user-select: none; /* منع تحديد النصوص */
-            -webkit-tap-highlight-color: transparent; /* منع وميض النقر على الهواتف */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             background-color: var(--bg-color);
-            color: var(--text-primary);
+            color: var(--text-color);
             height: 100vh;
             overflow: hidden;
             display: flex;
@@ -43,35 +42,70 @@
             cursor: pointer;
         }
 
-        /* الشريط العلوي - القائمة المنسدلة */
-        .top-bar {
+        /* 1. شريط التحكم العلوي (يحاكي الصورة) */
+        .top-controls {
+            display: flex;
+            justify-content: flex-start;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        /* زر الهدف الدائري */
+        .target-btn {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background-color: var(--bg-color);
+            border: 3px solid var(--border-color);
+            color: var(--text-color);
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        /* زر التصفير العلوي */
+        .reset-btn {
+            padding: 0 20px;
+            height: 55px;
+            border-radius: 27.5px;
+            background-color: var(--bg-color);
+            border: 3px solid var(--border-color);
+            color: var(--text-color);
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        /* 2. صندوق العبارة (إطار واضح وخط كبير) */
+        .dhikr-container {
             width: 100%;
-            margin-top: 20px;
+            margin-bottom: 30px;
         }
 
         .dhikr-dropdown {
             width: 100%;
-            padding: 15px;
-            font-size: 1.2rem;
-            font-weight: bold;
+            padding: 20px 15px;
+            font-size: 2rem;
+            font-weight: 900;
             text-align: center;
-            background-color: var(--element-bg);
-            color: var(--text-primary);
-            /* حدود سوداء واضحة */
-            border: 3px solid var(--border-color); 
-            border-radius: 10px;
+            text-align-last: center;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            border: 4px solid var(--border-color); /* إطار واضح */
+            border-radius: 15px;
             outline: none;
-            appearance: none; /* إخفاء سهم القائمة الافتراضي */
+            appearance: none; /* إخفاء سهم القائمة */
             cursor: pointer;
-            transition: border-color 0.3s;
+            white-space: normal;
+            line-height: 1.5;
         }
 
-        /* تغيير لون الحدود عند التركيز */
-        .dhikr-dropdown:focus {
-            border-color: var(--accent-color);
-        }
-
-        /* العداد المركزي - الدائرة */
+        /* 3. العداد المركزي */
         .counter-display {
             flex-grow: 1;
             display: flex;
@@ -82,247 +116,220 @@
         .circle {
             width: 280px;
             height: 280px;
-            background-color: var(--element-bg);
-            /* حدود برتقالية سميكة */
-            border: 10px solid var(--accent-color); 
+            background-color: var(--bg-color);
+            border: 12px solid var(--accent-color); /* برتقالي */
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 6rem;
-            font-weight: 900; /* خط عريض جداً */
-            color: var(--text-primary);
-            /* ظل أسود خفيف لإعطاء عمق */
-            box-shadow: 0 10px 0 rgba(0,0,0,0.1); 
+            font-size: 6.5rem;
+            font-weight: 900;
+            color: var(--text-color);
             transition: transform 0.05s ease-in-out;
         }
 
-        /* تأثير بصري بسيط عند النقر على الدائرة */
         .circle:active {
             transform: scale(0.97);
         }
 
-        /* الإحصائيات السفلية والأزرار */
+        /* 4. الإحصائيات السفلية */
         .statistics-bar {
             width: 100%;
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            margin-bottom: 20px;
+            gap: 15px;
+            margin-bottom: 10px;
         }
 
         .stat-box {
-            background-color: var(--element-bg);
-            color: var(--text-primary);
+            background-color: var(--bg-color);
+            color: var(--text-color);
             padding: 15px;
-            border-radius: 10px;
-            /* حدود سوداء خفيفة للتمييز */
-            border: 2px solid var(--border-color); 
+            border-radius: 15px;
+            border: 3px solid var(--border-color); 
             text-align: center;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: bold;
         }
 
-        /* زر التصفير - برتقالي بالكامل */
-        .reset-button {
-            background-color: var(--accent-color);
-            border: none;
-            color: #FFFFFF; /* نص أبيض للوضوح فوق البرتقالي */
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            margin-top: 5px;
-            cursor: pointer;
-            z-index: 10;
-            transition: background-color 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        .stat-value {
+            color: var(--accent-color); /* تمييز الأرقام بالبرتقالي */
         }
-
-        .reset-button:hover {
-            background-color: #e67e22; /* درجة أغمق قليلاً عند تمرير الماوس */
-        }
-        
-        /* تنسيق اختياري بسيط لنوافذ Prompt/Confirm لجعلها متناسقة */
-        /* ملاحظة: لا يمكن التحكم الكامل بشكل الـ Prompt الافتراضي عبر CSS */
     </style>
 </head>
 <body>
     <div class="app-container" id="tapArea">
-        <header class="top-bar">
-            <select id="dhikrSelect" class="dhikr-dropdown">
-                <option value="سُبْحَانَ اللَّهِ وَبِحَمْدِهِ">سُبْحَانَ اللَّهِ وَبِحَمْدِهِ</option>
-                <option value="أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ">أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ</option>
-                <option value="اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ">اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ</option>
-                <option value="لَا إِلَهَ إِلَّا اللَّهُ">لَا إِلَهَ إِلَّا اللَّهُ</option>
-                <option value="لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ">لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ</option>
-                <option value="حَسْبِيَ اللَّهُ وَنِعْمَ الْوَكِيلُ">حَسْبِيَ اللَّهُ وَنِعْمَ الْوَكِيلُ</option>
-                <option value="الْحَمْدُ لِلَّهِ">الْحَمْدُ لِلَّهِ</option>
-                <option value="اللَّهُ أَكْبَرُ">اللَّهُ أَكْبَرُ</option>
-                <option value="custom">عبارة مخصصة...</option>
-            </select>
+        
+        <header class="top-controls">
+            <button id="targetBtn" class="target-btn">∞</button>
+            <button id="resetBtn" class="reset-btn">تصفير</button>
         </header>
+
+        <div class="dhikr-container">
+            <select id="dhikrSelect" class="dhikr-dropdown">
+                <option value="سُبْحَانَ اللَّهِ وَبِحَمْدِهِ">سُبْحَانَ اللَّهِ وَبِحَمْدِهِ ▼</option>
+                <option value="أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ">أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ ▼</option>
+                <option value="اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ">اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ ▼</option>
+                <option value="لَا إِلَهَ إِلَّا اللَّهُ">لَا إِلَهَ إِلَّا اللَّهُ ▼</option>
+                <option value="لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ">لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ ▼</option>
+                <option value="حَسْبِيَ اللَّهُ وَنِعْمَ الْوَكِيلُ">حَسْبِيَ اللَّهُ وَنِعْمَ الْوَكِيلُ ▼</option>
+                <option value="الْحَمْدُ لِلَّهِ">الْحَمْدُ لِلَّهِ ▼</option>
+                <option value="اللَّهُ أَكْبَرُ">اللَّهُ أَكْبَرُ ▼</option>
+                <option value="custom">عبارة مخصصة... ▼</option>
+            </select>
+        </div>
 
         <main class="counter-display">
             <div class="circle" id="mainCounter">0</div>
         </main>
 
         <footer class="statistics-bar">
-            <div class="stat-box">الإجمالي للذكر الحالي : <span id="currentTotal" style="color: var(--accent-color);">0</span></div>
-            <div class="stat-box">المجموع الكلي لجميع الأذكار : <span id="globalTotal" style="color: var(--accent-color);">0</span></div>
-            <button id="resetBtn" class="reset-button">خيارات التصفير</button>
+            <div class="stat-box">الإجمالي : <span id="currentTotal" class="stat-value">0</span></div>
+            <div class="stat-box">المجموع الكلي : <span id="globalTotal" class="stat-value">0</span></div>
         </footer>
+
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- الإعدادات والمتغيرات ---
+            // تعريف عناصر الواجهة
             const tapArea = document.getElementById('tapArea');
             const dhikrSelect = document.getElementById('dhikrSelect');
             const mainCounterEl = document.getElementById('mainCounter');
             const currentTotalEl = document.getElementById('currentTotal');
             const globalTotalEl = document.getElementById('globalTotal');
             const resetBtn = document.getElementById('resetBtn');
+            const targetBtn = document.getElementById('targetBtn');
 
-            // تحميل البيانات من التخزين المحلي (localStorage)
+            // المتغيرات والبيانات
             let currentDhikr = dhikrSelect.value;
-            let counts = JSON.parse(localStorage.getItem('dhikrCounts_v2')) || {}; // استخدام مفتاح جديد للنسخة الجديدة
-            let globalTotal = parseInt(localStorage.getItem('globalTotal_v2')) || 0;
-            let currentSessionCount = 0; // العداد المركزي المؤقت (يصفر عند التبديل)
+            let counts = JSON.parse(localStorage.getItem('dhikrCounts_v3')) || {};
+            let globalTotal = parseInt(localStorage.getItem('globalTotal_v3')) || 0;
+            let currentSessionCount = 0;
+            
+            // متغيرات نظام الهدف (Target System)
+            const targetOptions = [0, 33, 99]; // 0 تعني مفتوح (بدون هدف)
+            let currentTargetIndex = 0;
+            let currentTarget = targetOptions[currentTargetIndex];
 
             // تهيئة الذكر الحالي
             if (!counts[currentDhikr]) counts[currentDhikr] = 0;
 
-            // --- الدوال الأساسية ---
-
-            // دالة تحديث الواجهة (DOM)
+            // دالة تحديث الواجهة
             const updateUI = () => {
-                // استخدام requestAnimationFrame لتحسين الأداء عند النقر السريع
                 requestAnimationFrame(() => {
                     mainCounterEl.innerText = currentSessionCount;
                     currentTotalEl.innerText = counts[currentDhikr];
                     globalTotalEl.innerText = globalTotal;
+                    targetBtn.innerText = currentTarget === 0 ? "∞" : currentTarget;
                 });
             };
 
             // دالة حفظ البيانات
             const saveData = () => {
-                localStorage.setItem('dhikrCounts_v2', JSON.stringify(counts));
-                localStorage.setItem('globalTotal_v2', globalTotal);
+                localStorage.setItem('dhikrCounts_v3', JSON.stringify(counts));
+                localStorage.setItem('globalTotal_v3', globalTotal);
             };
 
             // دالة الاهتزاز
-            const triggerVibration = (ms = 50) => {
-                if (navigator.vibrate) {
-                    navigator.vibrate(ms);
-                }
+            const triggerVibration = (pattern = 50) => {
+                if (navigator.vibrate) navigator.vibrate(pattern);
             };
 
-            // التهيئة الأولية للواجهة
             updateUI();
-            triggerVibration([50, 30, 50]); // اهتزاز ترحيبي عند الفتح
 
-
-            // --- مستمعي الأحداث (Event Listeners) ---
-
-            // 1. منطق النقر والعد (على كامل الشاشة)
+            // 1. منطق النقر والعد
             tapArea.addEventListener('click', (e) => {
-                // التحقق من أن النقر لم يتم على القائمة أو زر التصفير
+                // منع العد إذا تم النقر على الأزرار أو القائمة
                 if (e.target.closest('select, button')) return;
 
-                // زيادة العدادات
-                currentSessionCount++;
+                // التحقق مما إذا كان قد وصل للهدف في النقرة السابقة
+                if (currentTarget !== 0 && currentSessionCount === currentTarget) {
+                    currentSessionCount = 1; // تصفير العداد وبدء دورة جديدة
+                } else {
+                    currentSessionCount++;
+                }
+
                 counts[currentDhikr]++;
                 globalTotal++;
 
-                // حفظ وتحديث
+                // التنبيه عند الوصول للهدف المختار
+                if (currentTarget !== 0 && currentSessionCount === currentTarget) {
+                    triggerVibration([300, 100, 300]); // اهتزاز مميز وطويل
+                }
+
                 saveData();
                 updateUI();
             });
 
-            // 2. تصفير العداد اليدوي عند النقر المزدوج على الدائرة (ميزة إضافية للسهولة)
-            mainCounterEl.addEventListener('dblclick', (e) => {
-                e.stopPropagation(); // منع حدوث عد عند النقر المزدوج
-                triggerVibration(100);
-                currentSessionCount = 0;
-                updateUI();
-            });
-
-
-            // 3. تغيير الذكر من القائمة
+            // 2. تغيير الذكر
             dhikrSelect.addEventListener('change', (e) => {
                 triggerVibration(100);
                 const selectedValue = e.target.value;
                 
                 if (selectedValue === 'custom') {
-                    // التعامل مع العبارة المخصصة
                     const customDhikr = prompt("أدخل العبارة المخصصة الجديدة:");
                     if (customDhikr && customDhikr.trim() !== "") {
-                        const sanitizedDhikr = customDhikr.trim();
-                        // إضافة الخيار الجديد للقائمة قبل خيار "مخصصة"
+                        const sanitizedDhikr = customDhikr.trim() + " ▼";
                         const newOption = document.createElement('option');
                         newOption.value = sanitizedDhikr;
                         newOption.innerText = sanitizedDhikr;
                         dhikrSelect.insertBefore(newOption, dhikrSelect.lastElementChild);
-                        
                         dhikrSelect.value = sanitizedDhikr;
                         currentDhikr = sanitizedDhikr;
                     } else {
-                        // في حال الإلغاء، العودة للذكر الأول
-                        dhikrSelect.selectedIndex = 0;
-                        currentDhikr = dhikrSelect.value;
+                        dhikrSelect.value = currentDhikr;
                     }
                 } else {
                     currentDhikr = selectedValue;
                 }
 
-                // تصفير العداد المركزي وتهيئة عداد الذكر الجديد إذا لم يوجد
                 currentSessionCount = 0;
                 if (!counts[currentDhikr]) counts[currentDhikr] = 0;
-                
                 updateUI();
             });
 
-            // 4. خيارات التصفير (Reset)
-            resetBtn.addEventListener('click', (e) => {
-                e.stopPropagation(); // منع العد عند النقر على الزر
-                triggerVibration(150);
+            // 3. تغيير الهدف (33 / 99 / مفتوح)
+            targetBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                triggerVibration(50);
+                currentTargetIndex = (currentTargetIndex + 1) % targetOptions.length;
+                currentTarget = targetOptions[currentTargetIndex];
                 
-                const message = `اختر نوع التصفير:\n\n1 - تصفير العداد المركزي فقط (0)\n2 - تصفير إجمالي [${currentDhikr}] فقط\n3 - مسح كافة البيانات والمجموع الكلي نهائياً`;
-                const resetChoice = prompt(message, "1");
+                // إعادة ضبط العداد المركزي ليتناسب مع الهدف الجديد
+                currentSessionCount = 0; 
+                updateUI();
+            });
 
-                if (resetChoice === null) return; // المستخدم ألغى العملية
+            // 4. خيارات التصفير
+            resetBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                triggerVibration(100);
+                const resetChoice = prompt("اختر نوع التصفير:\n1 - العداد المركزي فقط\n2 - إجمالي الذكر الحالي\n3 - مسح كافة البيانات نهائياً", "1");
+                if (resetChoice === null) return;
 
                 switch(resetChoice.trim()) {
-                    case "1":
-                        currentSessionCount = 0;
+                    case "1": 
+                        currentSessionCount = 0; 
                         break;
                     case "2":
-                        if(confirm(`هل أنت متأكد من تصفير إجمالي [${currentDhikr}]؟\n(سيتم خصمه من المجموع الكلي)`)) {
-                            globalTotal -= counts[currentDhikr];
-                            counts[currentDhikr] = 0;
-                            currentSessionCount = 0;
-                        }
+                        globalTotal -= counts[currentDhikr];
+                        counts[currentDhikr] = 0;
+                        currentSessionCount = 0;
                         break;
                     case "3":
-                        if(confirm("تحذير هام!\nهل أنت متأكد من مسح جميع السجلات لجميع الأذكار وتصفير المجموع الكلي؟\nلا يمكن التراجع عن هذه الخطوة.")) {
+                        if(confirm("هل أنت متأكد من مسح جميع السجلات؟")) {
                             counts = {};
                             globalTotal = 0;
                             currentSessionCount = 0;
-                            // إعادة تهيئة الذكر الحالي بعد المسح الشامل
                             counts[currentDhikr] = 0;
-                            localStorage.removeItem('dhikrCounts_v2');
-                            localStorage.removeItem('globalTotal_v2');
+                            localStorage.removeItem('dhikrCounts_v3');
+                            localStorage.removeItem('globalTotal_v3');
                         }
                         break;
-                    default:
-                        alert("اختيار غير صحيح. لم يتم تغيير أي شيء.");
-                        return;
+                    default: return;
                 }
-                
-                // حفظ التغييرات وتحديث الواجهة
-                if (resetChoice.trim() !== "3") saveData(); // تم التعامل مع حفظ الحالة 3 داخلياً
+                if (resetChoice.trim() !== "3") saveData();
                 updateUI();
             });
         });
