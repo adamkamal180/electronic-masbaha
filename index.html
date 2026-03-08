@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-TK6242YVKZ"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -368,40 +367,6 @@
                 localStorage.setItem('dailyActivity_v5', JSON.stringify(dailyActivity));
             };
 
-            const triggerVibration = (pattern = 50) => {
-                if (navigator.vibrate) navigator.vibrate(pattern);
-            };
-
-            let audioCtx;
-            const initAudio = () => {
-                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                if (audioCtx.state === 'suspended') audioCtx.resume();
-            };
-
-            const playFeedback = (type) => {
-                if (!audioCtx) return;
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                
-                if (type === 'tick') {
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-                    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-                    osc.start();
-                    osc.stop(audioCtx.currentTime + 0.05);
-                } else if (type === 'alert') {
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
-                    osc.start();
-                    osc.stop(audioCtx.currentTime + 0.3);
-                }
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-            };
-
             // ==================================
             // منطق الخريطة الحرارية (Heatmap)
             // ==================================
@@ -447,21 +412,18 @@
 
             openStatsBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                initAudio();
                 generateHeatmap();
                 statsModal.classList.add('active');
             });
 
             closeStatsBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                initAudio();
                 statsModal.classList.remove('active');
             });
 
             updateUI();
 
             tapArea.addEventListener('click', (e) => {
-                initAudio();
                 // منع العد عند التفاعل مع الأزرار أو النافذة المنبثقة
                 if (e.target.closest('select, button, .modal-overlay')) return;
 
@@ -478,20 +440,11 @@
                 const today = getTodayString();
                 dailyActivity[today] = (dailyActivity[today] || 0) + 1;
 
-                if (currentTarget !== 0 && currentSessionCount === currentTarget) {
-                    triggerVibration([300, 100, 300]);
-                    playFeedback('alert');
-                } else {
-                    playFeedback('tick');
-                }
-
                 saveData();
                 updateUI();
             });
 
             dhikrSelect.addEventListener('change', (e) => {
-                initAudio();
-                triggerVibration(100);
                 const selectedValue = e.target.value;
                 
                 if (selectedValue === 'custom') {
@@ -518,8 +471,6 @@
 
             targetBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                initAudio();
-                triggerVibration(50);
                 currentTargetIndex = (currentTargetIndex + 1) % targetOptions.length;
                 currentTarget = targetOptions[currentTargetIndex];
                 localStorage.setItem('masbahaTargetIndex_v5', currentTargetIndex);
@@ -529,8 +480,6 @@
 
             resetBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                initAudio();
-                triggerVibration(100);
                 const resetChoice = prompt("اختر نوع التصفير:\n1 - العداد المركزي فقط\n2 - إجمالي الذكر الحالي\n3 - مسح كافة البيانات (بما فيها سجل النشاط)", "1");
                 if (resetChoice === null) return;
 
