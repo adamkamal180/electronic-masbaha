@@ -1,30 +1,46 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-TK6242YVKZ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-TK6242YVKZ');
-</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TK6242YVKZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-TK6242YVKZ');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>المسبحة الإلكترونية الذكية</title>
+    <title>المسبحة الإلكترونية الذكية 3D</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
+        /* المتغيرات للوضع الفاتح (Neumorphism 3D) */
         :root {
-            --bg-color: #FFFFFF;
-            --text-color: #000000;
+            --bg-color: #E0E5EC;
+            --text-color: #2D3436;
             --accent-color: #FF8C00;
-            --border-color: #000000;
+            --shadow-light: #ffffff;
+            --shadow-dark: #a3b1c6;
+            --nav-bg: #E0E5EC;
+        }
+
+        /* المتغيرات للوضع الداكن */
+        [data-theme="dark"] {
+            --bg-color: #26282B;
+            --text-color: #ffffff;
+            --accent-color: #FF8C00;
+            --shadow-light: #323438;
+            --shadow-dark: #1a1c1e;
+            --nav-bg: #26282B;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Cairo', sans-serif;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
         }
@@ -38,358 +54,606 @@
             justify-content: center;
         }
 
+        /* انتقال سلس للمتغيرات والألوان */
+        body, .app-container, .neu-out, .neu-in, .main-circle, .bottom-nav {
+            transition: background-color 0.4s ease, box-shadow 0.4s ease, color 0.4s ease;
+        }
+
         .app-container {
             width: 100%;
-            max-width: 450px;
-            height: 100%;
+            max-width: 480px;
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            padding: 20px;
-            cursor: pointer;
             position: relative;
         }
 
-        /* شريط التحكم العلوي */
-        .top-controls {
+        /* فئات التأثير الـ 3D الأساسية */
+        .neu-out {
+            background: var(--bg-color);
+            box-shadow: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
+            border-radius: 15px;
+        }
+        .neu-in {
+            background: var(--bg-color);
+            box-shadow: inset 6px 6px 12px var(--shadow-dark), inset -6px -6px 12px var(--shadow-light);
+            border-radius: 15px;
+        }
+
+        /* الشريط العلوي */
+        .top-header {
             display: flex;
             justify-content: space-between;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .top-btn-group {
-            display: flex;
-            gap: 10px;
-        }
-
-        .target-btn, .action-btn {
-            height: 55px;
-            background-color: var(--bg-color);
-            border: 3px solid var(--border-color);
-            color: var(--text-color);
-            font-weight: bold;
-            display: flex;
-            justify-content: center;
             align-items: center;
-            cursor: pointer;
+            padding: 20px;
             z-index: 10;
         }
 
-        .target-btn {
-            width: 55px;
-            border-radius: 50%;
-            font-size: 1.2rem;
-            flex-shrink: 0;
-        }
-
-        .action-btn {
-            padding: 0 20px;
-            border-radius: 27.5px;
-            font-size: 1.1rem;
-        }
-
-        /* زر الإحصائيات */
-        .stats-btn {
-            background-color: var(--accent-color);
-            color: #FFFFFF;
-            border-color: var(--accent-color);
-        }
-
-        /* صندوق العبارة */
-        .dhikr-container {
-            width: 100%;
-            margin-bottom: 30px;
-        }
-
-        .dhikr-dropdown {
-            width: 100%;
-            padding: 20px 15px;
-            font-size: 2rem;
+        .app-title {
+            font-size: 1.5rem;
             font-weight: 900;
-            text-align: center;
-            text-align-last: center;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            border: 4px solid var(--border-color);
-            border-radius: 15px;
-            outline: none;
-            appearance: none;
-            cursor: pointer;
-            white-space: normal;
-            line-height: 1.5;
-        }
-
-        /* العداد المركزي */
-        .counter-display {
-            flex-grow: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .circle {
-            width: 280px;
-            height: 280px;
-            background-color: var(--bg-color);
-            border: 12px solid var(--accent-color);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 6.5rem;
-            font-weight: 900;
-            color: var(--text-color);
-            transition: transform 0.05s ease-in-out;
-        }
-
-        .circle:active {
-            transform: scale(0.97);
-        }
-
-        /* الإحصائيات السفلية */
-        .statistics-bar {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 10px;
-        }
-
-        .stat-box {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            padding: 15px;
-            border-radius: 15px;
-            border: 3px solid var(--border-color); 
-            text-align: center;
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-
-        .stat-value {
             color: var(--accent-color);
         }
 
-        /* ==================================
-           نظام الخريطة الحرارية (Heatmap) 
-           ================================== */
-        .modal-overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(255, 255, 255, 0.95);
-            display: none;
-            flex-direction: column;
+        .icon-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.2rem;
+            display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 100;
-            padding: 20px;
+            cursor: pointer;
+        }
+        .icon-btn:active {
+            box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+            color: var(--accent-color);
         }
 
-        .modal-overlay.active {
+        /* الواجهات (Screens) */
+        .view {
+            display: none;
+            flex-direction: column;
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 20px 100px 20px; /* مساحة للشريط السفلي */
+            animation: fadeIn 0.3s ease;
+        }
+        .view.active {
             display: flex;
         }
 
-        .heatmap-container {
-            width: 100%;
-            background-color: var(--bg-color);
-            border: 4px solid var(--border-color);
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .heatmap-title {
-            font-size: 1.5rem;
-            font-weight: bold;
+        /* تخصيص شريط التمرير */
+        ::-webkit-scrollbar { width: 0px; }
+
+        .view-title {
+            font-size: 1.4rem;
+            font-weight: 900;
             margin-bottom: 20px;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* اختيار الذكر */
+        select {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: var(--accent-color);
+            background: transparent;
+            border: none;
+            outline: none;
+            appearance: none;
+            text-align: center;
+            text-align-last: center;
+            cursor: pointer;
+        }
+
+        /* شريط تقدم الهدف اليومي */
+        .goal-progress-container {
+            height: 30px;
+            border-radius: 15px;
+            position: relative;
+            margin-bottom: 20px;
+            overflow: hidden;
+            display: none;
+        }
+        .goal-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff8c00, #ffb347);
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .goal-progress-text {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 900;
+            font-size: 0.95rem;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        /* العداد المركزي 3D */
+        .main-circle {
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            font-size: 5rem;
+            font-weight: 900;
+            color: var(--accent-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 6px solid var(--bg-color);
+            cursor: pointer;
+            margin: auto;
+            background: var(--bg-color);
+            box-shadow: 10px 10px 20px var(--shadow-dark), -10px -10px 20px var(--shadow-light);
+            transition: all 0.1s ease;
+        }
+        .main-circle:active {
+            box-shadow: inset 10px 10px 20px var(--shadow-dark), inset -10px -10px 20px var(--shadow-light);
+            transform: scale(0.96);
             color: var(--text-color);
         }
 
-        .heatmap-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 8px;
-            margin-bottom: 20px;
-            direction: ltr; /* لضمان ترتيب الأيام تصاعدياً من اليسار لليمين */
-        }
-
-        .heat-box {
-            width: 100%;
-            aspect-ratio: 1;
-            border-radius: 6px;
-            background-color: var(--bg-color);
-            border: 2px solid var(--border-color);
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .heat-box:active {
-            transform: scale(0.9);
-        }
-
-        /* درجات الكثافة للون البرتقالي باستخدام الشفافية */
-        .heat-box[data-intensity="1"] { background-color: rgba(255, 140, 0, 0.25); border-color: rgba(255, 140, 0, 0.5); }
-        .heat-box[data-intensity="2"] { background-color: rgba(255, 140, 0, 0.5); border-color: rgba(255, 140, 0, 0.8); }
-        .heat-box[data-intensity="3"] { background-color: rgba(255, 140, 0, 0.75); border-color: var(--accent-color); }
-        .heat-box[data-intensity="4"] { background-color: var(--accent-color); border-color: var(--accent-color); }
-
-        .close-modal-btn {
-            width: 100%;
+        /* الإحصائيات السريعة */
+        .stat-badge {
+            flex: 1;
             padding: 15px;
-            background-color: var(--border-color);
-            color: var(--bg-color);
-            border: none;
-            border-radius: 10px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
+            border-radius: 15px;
+            text-align: center;
+        }
+        .stat-label { font-size: 0.9rem; font-weight: 800; opacity: 0.8; }
+        .stat-value { font-size: 1.4rem; font-weight: 900; color: var(--accent-color); margin-top: 5px; }
+
+        /* حقول الإدخال والأزرار */
+        input[type="number"], input[type="time"], input[type="text"] {
+            width: 100%; padding: 15px;
+            border: none; outline: none; background: transparent;
+            color: var(--text-color); font-weight: 800; font-size: 1.1rem; text-align: center;
+        }
+        ::placeholder { color: var(--text-color); opacity: 0.5; }
+        
+        .primary-btn {
+            width: 100%; padding: 15px; border: none; cursor: pointer;
+            font-size: 1.2rem; font-weight: 900; color: var(--accent-color);
+            transition: all 0.2s ease;
+        }
+        .primary-btn:active {
+            box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
         }
 
-        .heatmap-legend {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 5px;
-            margin-top: 15px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            direction: rtl;
+        /* الخريطة الحرارية (Heatmap) */
+        .heatmap-grid {
+            display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; direction: ltr; margin-bottom: 15px;
         }
+        .heat-box {
+            aspect-ratio: 1; border-radius: 6px; background-color: var(--bg-color);
+            box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light);
+            cursor: pointer;
+        }
+        .heat-box[data-intensity="1"] { background-color: rgba(255, 140, 0, 0.25); box-shadow: none;}
+        .heat-box[data-intensity="2"] { background-color: rgba(255, 140, 0, 0.5); box-shadow: none;}
+        .heat-box[data-intensity="3"] { background-color: rgba(255, 140, 0, 0.75); box-shadow: none;}
+        .heat-box[data-intensity="4"] { background-color: var(--accent-color); box-shadow: none;}
+
+        /* مفتاح التبديل (الوضع الداكن) */
+        .switch { position: relative; display: inline-block; width: 60px; height: 32px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: var(--bg-color); border-radius: 30px; transition: 0.4s;
+            box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+        }
+        .slider:before {
+            position: absolute; content: ""; height: 24px; width: 24px; left: 4px; bottom: 4px;
+            background-color: var(--text-color); border-radius: 50%; transition: 0.4s;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+        }
+        input:checked + .slider { background-color: var(--accent-color); }
+        input:checked + .slider:before { transform: translateX(28px); background-color: #fff; }
+
+        /* شريط التنقل السفلي */
+        .bottom-nav {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            display: flex; justify-content: space-around;
+            padding: 15px 10px 20px;
+            background: var(--nav-bg);
+            border-top-left-radius: 30px; border-top-right-radius: 30px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+            z-index: 100;
+        }
+        [data-theme="dark"] .bottom-nav { box-shadow: 0 -5px 20px rgba(0,0,0,0.3); }
         
-        .legend-box {
-            width: 15px; height: 15px;
-            border-radius: 3px;
-            border: 1px solid var(--border-color);
+        .nav-item {
+            display: flex; flex-direction: column; align-items: center;
+            color: var(--text-color); opacity: 0.4; cursor: pointer; transition: all 0.3s ease;
         }
+        .nav-item.active { opacity: 1; color: var(--accent-color); transform: translateY(-5px); }
+        .nav-icon { font-size: 1.5rem; margin-bottom: 5px; }
+        .nav-text { font-size: 0.85rem; font-weight: 800; }
+
+        /* رسائل الإشعار والنوافذ (Toast & Modals) */
+        #toast {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            background-color: var(--accent-color); color: #fff;
+            padding: 12px 25px; border-radius: 30px; font-size: 1rem; font-weight: 900;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2); transition: bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 2000; text-align: center; white-space: pre-wrap; pointer-events: none;
+        }
+        #toast.show { bottom: 100px; }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(5px);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 3000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+        
+        .modal-content {
+            width: 90%; max-width: 400px; padding: 30px; border-radius: 25px; text-align: center;
+        }
+        @keyframes ring { 0% { transform: rotate(-15deg); } 100% { transform: rotate(15deg); } }
     </style>
 </head>
 <body>
-    <div class="app-container" id="tapArea">
+
+    <div id="reminderModal" class="modal-overlay">
+        <div class="modal-content neu-out">
+            <i class="fas fa-bell" style="font-size: 4.5rem; color: var(--accent-color); margin-bottom: 20px; animation: ring 0.5s infinite alternate;"></i>
+            <h2 style="margin-bottom: 15px; font-weight: 900; color: var(--accent-color);">حان وقت الذكر!</h2>
+            <p id="reminderModalText" style="font-size: 1.3rem; font-weight: 900; margin-bottom: 25px; line-height: 1.5;"></p>
+            <button class="primary-btn neu-out" onclick="document.getElementById('reminderModal').classList.remove('active')">جزاكم الله خيراً</button>
+        </div>
+    </div>
+
+    <div id="toast"></div>
+
+    <div class="app-container">
         
-        <header class="top-controls">
-            <button id="targetBtn" class="target-btn">∞</button>
-            <div class="top-btn-group">
-                <button id="openStatsBtn" class="action-btn stats-btn">النشاط</button>
-                <button id="resetBtn" class="action-btn">تصفير</button>
+        <header class="top-header">
+            <h1 class="app-title">المسبحة الذكية</h1>
+            <div style="display: flex; gap: 15px;">
+                <button class="icon-btn neu-out" id="resetBtn" title="تصفير"><i class="fas fa-redo"></i></button>
+                <button class="icon-btn neu-out" id="settingsBtn" title="الإعدادات"><i class="fas fa-cog"></i></button>
             </div>
         </header>
 
-        <div class="dhikr-container">
-            <select id="dhikrSelect" class="dhikr-dropdown">
-                <option value="سُبْحَانَ اللَّهِ وَبِحَمْدِهِ">سُبْحَانَ اللَّهِ وَبِحَمْدِهِ ▼</option>
-                <option value="أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ">أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ ▼</option>
-                <option value="اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ">اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ ▼</option>
-                <option value="لَا إِلَهَ إِلَّا اللَّهُ">لَا إِلَهَ إِلَّا اللَّهُ ▼</option>
-                <option value="لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ">لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ ▼</option>
-                <option value="حَسْبِيَ اللَّهُ وَنِعْمَ الْوَكِيلُ">حَسْبِيَ اللَّهُ وَنِعْمَ الْوَكِيلُ ▼</option>
-                <option value="الْحَمْدُ لِلَّهِ">الْحَمْدُ لِلَّهِ ▼</option>
-                <option value="اللَّهُ أَكْبَرُ">اللَّهُ أَكْبَرُ ▼</option>
-                <option value="custom">عبارة مخصصة... ▼</option>
-            </select>
-        </div>
+        <div class="view active" id="homeView">
+            <div class="neu-in" style="margin-bottom: 25px;">
+                <select id="dhikrSelect">
+                    <option value="سُبْحَانَ اللَّهِ وَبِحَمْدِهِ ▼">سُبْحَانَ اللَّهِ وَبِحَمْدِهِ ▼</option>
+                    <option value="أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ ▼">أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ ▼</option>
+                    <option value="اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ ▼">اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ ▼</option>
+                    <option value="لَا إِلَهَ إِلَّا اللَّهُ ▼">لَا إِلَهَ إِلَّا اللَّهُ ▼</option>
+                    <option value="لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ ▼">لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ ▼</option>
+                    <option value="حَسْبِيَ اللَّهُ وَنِعْمَ الْوَكِيلُ ▼">حَسْبِيَ اللَّهُ وَنِعْمَ الْوَكِيلُ ▼</option>
+                    <option value="الْحَمْدُ لِلَّهِ ▼">الْحَمْدُ لِلَّهِ ▼</option>
+                    <option value="اللَّهُ أَكْبَرُ ▼">اللَّهُ أَكْبَرُ ▼</option>
+                    <option value="custom">عبارة مخصصة... ▼</option>
+                </select>
+            </div>
 
-        <main class="counter-display">
-            <div class="circle" id="mainCounter">0</div>
-        </main>
+            <div class="goal-progress-container neu-in" id="homeGoalContainer">
+                <div class="goal-progress-fill" id="homeGoalFill"></div>
+                <div class="goal-progress-text" id="homeGoalText">الهدف: 0 / 0</div>
+            </div>
 
-        <footer class="statistics-bar">
-            <div class="stat-box">الإجمالي : <span id="currentTotal" class="stat-value">0</span></div>
-            <div class="stat-box">المجموع الكلي : <span id="globalTotal" class="stat-value">0</span></div>
-        </footer>
+            <div style="flex-grow: 1; display: flex; justify-content: center; align-items: center; margin-bottom: 25px;">
+                <button class="main-circle" id="mainCounterBtn">0</button>
+            </div>
 
-        <div id="statsModal" class="modal-overlay">
-            <div class="heatmap-container">
-                <div class="heatmap-title">نشاطك في آخر 35 يوماً</div>
-                <div id="heatmapGrid" class="heatmap-grid">
-                    </div>
-                <div class="heatmap-legend">
-                    <span>أقل</span>
-                    <div class="legend-box" style="background-color: var(--bg-color);"></div>
-                    <div class="legend-box" style="background-color: rgba(255, 140, 0, 0.25);"></div>
-                    <div class="legend-box" style="background-color: rgba(255, 140, 0, 0.5);"></div>
-                    <div class="legend-box" style="background-color: rgba(255, 140, 0, 0.75);"></div>
-                    <div class="legend-box" style="background-color: var(--accent-color);"></div>
-                    <span>أكثر</span>
+            <div style="display: flex; gap: 15px; margin-bottom: 10px;">
+                <div class="neu-out stat-badge">
+                    <div class="stat-label">الإجمالي للذكر</div>
+                    <div class="stat-value" id="currentDhikrTotal">0</div>
                 </div>
-                <br>
-                <button id="closeStatsBtn" class="close-modal-btn">إغلاق</button>
+                <div class="neu-out stat-badge">
+                    <div class="stat-label">المجموع الكلي</div>
+                    <div class="stat-value" id="globalTotal">0</div>
+                </div>
             </div>
         </div>
+
+        <div class="view" id="goalView">
+            <h2 class="view-title"><i class="fas fa-bullseye"></i> الهدف اليومي</h2>
+            
+            <div class="neu-out" style="padding: 25px; text-align: center;">
+                <label style="display:block; margin-bottom:12px; font-weight:900;">1- الذكر المستهدف لليوم:</label>
+                <div class="neu-in" style="margin-bottom: 25px;">
+                    <select id="goalDhikrSelect" style="padding: 10px; font-size: 1.1rem; color: var(--text-color);"></select>
+                </div>
+                
+                <label style="display:block; margin-bottom:12px; font-weight:900;">2- العدد المطلوب الوصول إليه:</label>
+                <div class="neu-in" style="margin-bottom: 30px;">
+                    <input type="number" id="goalTargetInput" placeholder="مثال: 1000">
+                </div>
+
+                <button class="neu-out primary-btn" id="saveGoalBtn">حفظ وبدء الهدف</button>
+                <button class="neu-out primary-btn" id="cancelGoalBtn" style="color: #e74c3c; margin-top: 15px;">إلغاء الهدف الحالي</button>
+            </div>
+        </div>
+
+        <div class="view" id="achievementsView">
+            <h2 class="view-title"><i class="fas fa-trophy"></i> إنجازاتي</h2>
+            
+            <div class="neu-out" style="padding: 20px; margin-bottom: 20px;">
+                <h3 style="margin-bottom: 15px; text-align: center; font-weight: 900;">نشاط آخر 35 يوماً</h3>
+                <div id="heatmapGrid" class="heatmap-grid"></div>
+                
+                <div style="display:flex; justify-content:center; gap:5px; margin-top:10px; font-size:0.85rem; font-weight:900;">
+                    <span>أقل</span>
+                    <div style="width:16px; height:16px; border-radius:4px; background-color: var(--bg-color); box-shadow: inset 1px 1px 3px var(--shadow-dark);"></div>
+                    <div style="width:16px; height:16px; border-radius:4px; background-color: rgba(255, 140, 0, 0.25);"></div>
+                    <div style="width:16px; height:16px; border-radius:4px; background-color: rgba(255, 140, 0, 0.5);"></div>
+                    <div style="width:16px; height:16px; border-radius:4px; background-color: rgba(255, 140, 0, 0.75);"></div>
+                    <div style="width:16px; height:16px; border-radius:4px; background-color: var(--accent-color);"></div>
+                    <span>أكثر</span>
+                </div>
+            </div>
+
+            <div class="neu-out" style="padding: 20px;">
+                <h3 style="margin-bottom: 20px; text-align: center; font-weight: 900;">سجل الأذكار المفصل</h3>
+                <div id="dhikrListContainer" style="display: flex; flex-direction: column; gap: 15px;"></div>
+            </div>
+        </div>
+
+        <div class="view" id="settingsView">
+            <h2 class="view-title"><i class="fas fa-cog"></i> الإعدادات</h2>
+
+            <div class="neu-out" style="padding: 25px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: 900; font-size: 1.1rem;"><i class="fas fa-moon" style="color:var(--accent-color); margin-left: 10px;"></i> الوضع الداكن</span>
+                <label class="switch">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="neu-out" style="padding: 25px;">
+                <h3 style="margin-bottom: 10px; font-weight: 900;"><i class="fas fa-bell" style="color:var(--accent-color); margin-left: 10px;"></i> التنبيهات وجدول المواعيد</h3>
+                <p style="font-size: 0.9rem; margin-bottom: 20px; opacity: 0.8; font-weight: bold;">أضف موعداً ليقوم التطبيق بتذكيرك (طالما هو مفتوح في المتصفح).</p>
+                
+                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                    <div class="neu-in" style="flex: 1;"><input type="time" id="reminderTime"></div>
+                    <div class="neu-in" style="flex: 2;"><input type="text" id="reminderText" placeholder="مثال: أذكار الصباح"></div>
+                </div>
+                
+                <button class="neu-out primary-btn" id="addReminderBtn">إضافة التنبيه</button>
+                <div id="remindersList" style="margin-top: 25px; display: flex; flex-direction: column; gap: 15px;"></div>
+            </div>
+        </div>
+
+        <nav class="bottom-nav">
+            <div class="nav-item active" data-target="homeView">
+                <i class="fas fa-ring nav-icon"></i>
+                <span class="nav-text">السبحة</span>
+            </div>
+            <div class="nav-item" data-target="goalView">
+                <i class="fas fa-bullseye nav-icon"></i>
+                <span class="nav-text">الهدف</span>
+            </div>
+            <div class="nav-item" data-target="achievementsView">
+                <i class="fas fa-award nav-icon"></i>
+                <span class="nav-text">الإنجازات</span>
+            </div>
+        </nav>
 
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const tapArea = document.getElementById('tapArea');
-            const dhikrSelect = document.getElementById('dhikrSelect');
-            const mainCounterEl = document.getElementById('mainCounter');
-            const currentTotalEl = document.getElementById('currentTotal');
-            const globalTotalEl = document.getElementById('globalTotal');
-            const resetBtn = document.getElementById('resetBtn');
-            const targetBtn = document.getElementById('targetBtn');
-            const openStatsBtn = document.getElementById('openStatsBtn');
-            const closeStatsBtn = document.getElementById('closeStatsBtn');
-            const statsModal = document.getElementById('statsModal');
-            const heatmapGrid = document.getElementById('heatmapGrid');
 
-            let currentDhikr = dhikrSelect.value;
+            // === 1. قواعد البيانات والمحافظة على السجلات القديمة ===
+            const dhikrSelect = document.getElementById('dhikrSelect');
+            
+            // استدعاء البيانات باستخدام مفاتيحك القديمة لعدم ضياع بيانات المستخدمين
             let counts = JSON.parse(localStorage.getItem('dhikrCounts_v5')) || {};
             let globalTotal = parseInt(localStorage.getItem('globalTotal_v5')) || 0;
-            // هيكل البيانات الجديد للمصفوفة الحرارية
-            let dailyActivity = JSON.parse(localStorage.getItem('dailyActivity_v5')) || {}; 
-            let currentSessionCount = 0;
+            let dailyActivity = JSON.parse(localStorage.getItem('dailyActivity_v5')) || {};
             
-            const targetOptions = [0, 33, 99];
-            let currentTargetIndex = parseInt(localStorage.getItem('masbahaTargetIndex_v5')) || 0;
-            let currentTarget = targetOptions[currentTargetIndex];
+            // مفاتيح جديدة للخصائص المضافة
+            let dailyGoal = JSON.parse(localStorage.getItem('dailyGoal_v6')) || { dhikr: '', target: 0, current: 0, date: '' };
+            let reminders = JSON.parse(localStorage.getItem('dhikrReminders_v6')) || [];
 
+            // إضافة الأذكار المخصصة القديمة للقائمة المنسدلة
+            for(let dhikr in counts) {
+                if (!Array.from(dhikrSelect.options).some(opt => opt.value === dhikr) && dhikr !== 'custom') {
+                    const newOption = new Option(dhikr, dhikr);
+                    dhikrSelect.insertBefore(newOption, dhikrSelect.lastElementChild);
+                }
+            }
+
+            let currentDhikr = dhikrSelect.value;
+            let currentSessionCount = 0;
             if (!counts[currentDhikr]) counts[currentDhikr] = 0;
 
-            // دالة استخراج تاريخ اليوم بصيغة (YYYY-MM-DD)
             const getTodayString = () => {
                 const d = new Date();
                 return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-            };
-
-            const updateUI = () => {
-                requestAnimationFrame(() => {
-                    mainCounterEl.innerText = currentSessionCount;
-                    currentTotalEl.innerText = counts[currentDhikr];
-                    globalTotalEl.innerText = globalTotal;
-                    targetBtn.innerText = currentTarget === 0 ? "∞" : currentTarget;
-                });
             };
 
             const saveData = () => {
                 localStorage.setItem('dhikrCounts_v5', JSON.stringify(counts));
                 localStorage.setItem('globalTotal_v5', globalTotal);
                 localStorage.setItem('dailyActivity_v5', JSON.stringify(dailyActivity));
+                localStorage.setItem('dailyGoal_v6', JSON.stringify(dailyGoal));
+                localStorage.setItem('dhikrReminders_v6', JSON.stringify(reminders));
             };
 
-            // ==================================
-            // منطق الخريطة الحرارية (Heatmap)
-            // ==================================
-            const generateHeatmap = () => {
-                heatmapGrid.innerHTML = '';
-                let maxCount = 0;
-                const last35Days = [];
+            // إشعار التوست السريع
+            let toastTimeout;
+            const showToast = (msg, duration = 3000) => {
+                const toast = document.getElementById('toast');
+                toast.innerText = msg;
+                toast.classList.add('show');
+                clearTimeout(toastTimeout);
+                toastTimeout = setTimeout(() => toast.classList.remove('show'), duration);
+            };
+
+            // === 2. نظام التنقل والواجهات ===
+            const views = document.querySelectorAll('.view');
+            const navItems = document.querySelectorAll('.nav-item');
+            
+            function showView(viewId) {
+                views.forEach(v => v.classList.remove('active'));
+                document.getElementById(viewId).classList.add('active');
                 
-                // جلب البيانات واستخراج أعلى قيمة لتحديد مقياس الألوان
+                navItems.forEach(n => {
+                    if(n.getAttribute('data-target') === viewId) n.classList.add('active');
+                    else n.classList.remove('active');
+                });
+
+                if(viewId === 'achievementsView') renderAchievements();
+                if(viewId === 'goalView') renderGoalView();
+                if(viewId === 'settingsView') renderSettingsView();
+            }
+
+            navItems.forEach(item => {
+                item.addEventListener('click', () => showView(item.getAttribute('data-target')));
+            });
+
+            document.getElementById('settingsBtn').addEventListener('click', () => {
+                navItems.forEach(n => n.classList.remove('active'));
+                showView('settingsView');
+            });
+
+            // === 3. الواجهة الرئيسية والتسبيح ===
+            function updateMainUI() {
+                document.getElementById('mainCounterBtn').innerText = currentSessionCount;
+                document.getElementById('currentDhikrTotal').innerText = counts[currentDhikr] || 0;
+                document.getElementById('globalTotal').innerText = globalTotal;
+
+                const today = getTodayString();
+                const homeGoalContainer = document.getElementById('homeGoalContainer');
+                
+                if (dailyGoal.target > 0 && dailyGoal.dhikr === currentDhikr && dailyGoal.date === today) {
+                    homeGoalContainer.style.display = 'block';
+                    const percent = Math.min((dailyGoal.current / dailyGoal.target) * 100, 100);
+                    document.getElementById('homeGoalFill').style.width = percent + '%';
+                    document.getElementById('homeGoalText').innerText = `الهدف: ${dailyGoal.current} / ${dailyGoal.target}`;
+                } else {
+                    homeGoalContainer.style.display = 'none';
+                }
+            }
+
+            document.getElementById('mainCounterBtn').addEventListener('click', () => {
+                if(navigator.vibrate) navigator.vibrate(30); // اهتزاز خفيف واقعي
+                
+                currentSessionCount++;
+                counts[currentDhikr] = (counts[currentDhikr] || 0) + 1;
+                globalTotal++;
+                
+                const today = getTodayString();
+                dailyActivity[today] = (dailyActivity[today] || 0) + 1;
+
+                if (dailyGoal.target > 0 && dailyGoal.dhikr === currentDhikr && dailyGoal.date === today) {
+                    if(dailyGoal.current < dailyGoal.target) {
+                        dailyGoal.current++;
+                        if(dailyGoal.current === dailyGoal.target) {
+                            if(navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 100]);
+                            showToast(`🎉 ما شاء الله! لقد أتممت هدفك اليومي للذكر:\n${currentDhikr.replace('▼','').trim()}`, 5000);
+                        }
+                    }
+                }
+                saveData(); updateMainUI();
+            });
+
+            dhikrSelect.addEventListener('change', (e) => {
+                if (e.target.value === 'custom') {
+                    const customDhikr = prompt("أدخل الذكر المخصص الجديد:");
+                    if (customDhikr && customDhikr.trim() !== "") {
+                        let val = customDhikr.trim();
+                        if(!val.includes('▼')) val += ' ▼';
+                        const newOpt = new Option(val, val);
+                        dhikrSelect.insertBefore(newOpt, dhikrSelect.lastElementChild);
+                        dhikrSelect.value = val;
+                        currentDhikr = val;
+                    } else {
+                        dhikrSelect.value = currentDhikr;
+                    }
+                } else {
+                    currentDhikr = e.target.value;
+                }
+                currentSessionCount = 0;
+                if (!counts[currentDhikr]) counts[currentDhikr] = 0;
+                updateMainUI();
+            });
+
+            // === 4. واجهة الهدف اليومي ===
+            function renderGoalView() {
+                const goalDhikrSelect = document.getElementById('goalDhikrSelect');
+                goalDhikrSelect.innerHTML = '';
+                Array.from(dhikrSelect.options).forEach(opt => {
+                    if (opt.value !== 'custom') goalDhikrSelect.add(new Option(opt.text.replace('▼',''), opt.value));
+                });
+
+                if (dailyGoal.date !== getTodayString()) dailyGoal.current = 0;
+                if (dailyGoal.dhikr) goalDhikrSelect.value = dailyGoal.dhikr;
+                if (dailyGoal.target > 0) document.getElementById('goalTargetInput').value = dailyGoal.target;
+            }
+
+            document.getElementById('saveGoalBtn').addEventListener('click', () => {
+                const target = parseInt(document.getElementById('goalTargetInput').value);
+                const dhikr = document.getElementById('goalDhikrSelect').value;
+                if (target > 0) {
+                    dailyGoal = {
+                        dhikr: dhikr, target: target,
+                        current: (dailyGoal.dhikr === dhikr && dailyGoal.date === getTodayString()) ? dailyGoal.current : 0,
+                        date: getTodayString()
+                    };
+                    saveData();
+                    showToast('🎯 تم حفظ وتفعيل الهدف بنجاح.');
+                    
+                    // تحويل المستخدم للرئيسية تلقائياً
+                    dhikrSelect.value = dhikr;
+                    currentDhikr = dhikr;
+                    currentSessionCount = 0;
+                    showView('homeView');
+                    updateMainUI();
+                } else {
+                    showToast('يرجى إدخال عدد مستهدف صحيح أكبر من الصفر.');
+                }
+            });
+
+            document.getElementById('cancelGoalBtn').addEventListener('click', () => {
+                dailyGoal = { dhikr: '', target: 0, current: 0, date: '' };
+                saveData();
+                document.getElementById('goalTargetInput').value = '';
+                showToast('تم إلغاء الهدف الحالي.');
+            });
+
+            // === 5. واجهة الإنجازات والخريطة الحرارية ===
+            function renderAchievements() {
+                // رسم الخريطة الحرارية
+                const heatmapGrid = document.getElementById('heatmapGrid');
+                heatmapGrid.innerHTML = '';
+                let maxCount = 0; const last35Days = [];
                 for(let i = 34; i >= 0; i--) {
-                    const d = new Date();
-                    d.setDate(d.getDate() - i);
+                    const d = new Date(); d.setDate(d.getDate() - i);
                     const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
                     const count = dailyActivity[dateStr] || 0;
                     last35Days.push({ dateStr, count });
                     if(count > maxCount) maxCount = count;
                 }
 
-                // رسم المربعات وتحديد اللون
                 last35Days.forEach(day => {
                     const box = document.createElement('div');
                     box.className = 'heat-box';
-                    
                     let intensity = 0;
                     if (day.count > 0) {
                         if (day.count <= maxCount * 0.25) intensity = 1;
@@ -397,118 +661,140 @@
                         else if (day.count <= maxCount * 0.75) intensity = 3;
                         else intensity = 4;
                     }
-                    
                     box.setAttribute('data-intensity', intensity);
-                    
-                    // إظهار تنبيه يوضح التاريخ والعدد عند النقر على المربع
-                    box.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        alert(`التاريخ: ${day.dateStr}\nالتسبيحات: ${day.count}`);
-                    });
-                    
+                    box.onclick = () => showToast(`التاريخ: ${day.dateStr}\nالتسبيحات: ${day.count}`);
                     heatmapGrid.appendChild(box);
                 });
+
+                // تفصيل الأذكار
+                const container = document.getElementById('dhikrListContainer');
+                container.innerHTML = '';
+                let hasData = false;
+                
+                // ترتيب الأذكار من الأعلى للأقل
+                const sortedDhikr = Object.entries(counts).sort((a,b) => b[1] - a[1]);
+                
+                sortedDhikr.forEach(([dhikr, count]) => {
+                    if (count > 0) {
+                        hasData = true;
+                        container.innerHTML += `
+                            <div class="neu-in" style="display:flex; justify-content:space-between; align-items:center; padding:18px;">
+                                <span style="font-weight:900; font-size:1.05rem; flex:1;">${dhikr.replace('▼','').trim()}</span>
+                                <span style="font-weight:900; color:var(--accent-color); font-size:1.3rem;">${count}</span>
+                            </div>
+                        `;
+                    }
+                });
+                if(!hasData) container.innerHTML = '<div style="text-align:center; opacity:0.6; font-weight:bold;">لم تبدأ التسبيح بعد</div>';
+            }
+
+            // === 6. الإعدادات والوضع الداكن والتنبيهات ===
+            const themeToggle = document.getElementById('themeToggle');
+            if (localStorage.getItem('theme_v6') === 'dark') {
+                document.body.setAttribute('data-theme', 'dark');
+                themeToggle.checked = true;
+            }
+
+            themeToggle.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    document.body.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme_v6', 'dark');
+                } else {
+                    document.body.removeAttribute('data-theme');
+                    localStorage.setItem('theme_v6', 'light');
+                }
+            });
+
+            function renderSettingsView() {
+                const list = document.getElementById('remindersList');
+                list.innerHTML = '';
+                reminders.forEach((rem, index) => {
+                    list.innerHTML += `
+                        <div class="neu-out" style="display:flex; justify-content:space-between; align-items:center; padding:15px; border-radius: 12px;">
+                            <div>
+                                <div style="font-weight:900; color:var(--accent-color); font-size:1.3rem;"><i class="far fa-clock"></i> ${rem.time}</div>
+                                <div style="font-size:1rem; font-weight:900; opacity: 0.9;">${rem.text}</div>
+                            </div>
+                            <button class="neu-in" onclick="deleteReminder(${index})" style="background:none; border:none; color:#e74c3c; width: 45px; height: 45px; border-radius: 10px; font-size:1.2rem; cursor:pointer;"><i class="fas fa-trash"></i></button>
+                        </div>
+                    `;
+                });
+            }
+
+            window.deleteReminder = (index) => {
+                reminders.splice(index, 1);
+                saveData(); renderSettingsView();
             };
 
-            openStatsBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                generateHeatmap();
-                statsModal.classList.add('active');
-            });
-
-            closeStatsBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                statsModal.classList.remove('active');
-            });
-
-            updateUI();
-
-            tapArea.addEventListener('click', (e) => {
-                // منع العد عند التفاعل مع الأزرار أو النافذة المنبثقة
-                if (e.target.closest('select, button, .modal-overlay')) return;
-
-                if (currentTarget !== 0 && currentSessionCount === currentTarget) {
-                    currentSessionCount = 1;
+            document.getElementById('addReminderBtn').addEventListener('click', () => {
+                const time = document.getElementById('reminderTime').value;
+                const text = document.getElementById('reminderText').value;
+                if (time && text) {
+                    reminders.push({ time, text });
+                    // ترتيب المواعيد تصاعدياً
+                    reminders.sort((a,b) => a.time.localeCompare(b.time));
+                    saveData();
+                    renderSettingsView();
+                    document.getElementById('reminderTime').value = '';
+                    document.getElementById('reminderText').value = '';
+                    showToast('⏰ تم إضافة موعد التنبيه بنجاح');
                 } else {
-                    currentSessionCount++;
+                    showToast('يرجى إدخال الوقت واسم الذكر أو التنبيه');
                 }
-
-                counts[currentDhikr]++;
-                globalTotal++;
-                
-                // تسجيل التسبيحة في بيانات اليوم للمصفوفة الحرارية
-                const today = getTodayString();
-                dailyActivity[today] = (dailyActivity[today] || 0) + 1;
-
-                saveData();
-                updateUI();
             });
 
-            dhikrSelect.addEventListener('change', (e) => {
-                const selectedValue = e.target.value;
+            // فاحص التنبيهات (يعمل في الخلفية كل 30 ثانية)
+            setInterval(() => {
+                const now = new Date();
+                const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
                 
-                if (selectedValue === 'custom') {
-                    const customDhikr = prompt("أدخل العبارة المخصصة الجديدة:");
-                    if (customDhikr && customDhikr.trim() !== "") {
-                        const sanitizedDhikr = customDhikr.trim() + " ▼";
-                        const newOption = document.createElement('option');
-                        newOption.value = sanitizedDhikr;
-                        newOption.innerText = sanitizedDhikr;
-                        dhikrSelect.insertBefore(newOption, dhikrSelect.lastElementChild);
-                        dhikrSelect.value = sanitizedDhikr;
-                        currentDhikr = sanitizedDhikr;
-                    } else {
-                        dhikrSelect.value = currentDhikr;
+                reminders.forEach(rem => {
+                    const notifyKey = `notified_${rem.time}_${getTodayString()}`;
+                    const lastNotified = localStorage.getItem(notifyKey);
+                    
+                    if (rem.time === currentTime && !lastNotified) {
+                        localStorage.setItem(notifyKey, 'true');
+                        
+                        // إظهار نافذة التنبيه الجميلة
+                        document.getElementById('reminderModalText').innerText = rem.text;
+                        document.getElementById('reminderModal').classList.add('active');
+                        
+                        if(navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 200]);
                     }
-                } else {
-                    currentDhikr = selectedValue;
+                });
+            }, 30000);
+
+            // === 7. التصفير ===
+            document.getElementById('resetBtn').addEventListener('click', () => {
+                const choice = prompt("اختر نوع التصفير:\n1 - العداد الحالي للذكر (تصفير الجلسة)\n2 - إجمالي الذكر المحدد فقط\n3 - مسح كافة البيانات من الهاتف بشكل نهائي", "1");
+                if (!choice) return;
+
+                if (choice === "1") {
+                    currentSessionCount = 0;
+                } else if (choice === "2") {
+                    globalTotal -= counts[currentDhikr];
+                    counts[currentDhikr] = 0;
+                    currentSessionCount = 0;
+                    if(dailyGoal.dhikr === currentDhikr) dailyGoal.current = 0;
+                } else if (choice === "3") {
+                    if (confirm("تحذير: سيتم مسح جميع الإحصائيات، الأهداف، والتنبيهات. هل أنت متأكد؟")) {
+                        counts = {}; globalTotal = 0; currentSessionCount = 0; dailyActivity = {};
+                        counts[currentDhikr] = 0; dailyGoal = { dhikr: '', target: 0, current: 0, date: '' };
+                        reminders = [];
+                        localStorage.removeItem('dhikrCounts_v5');
+                        localStorage.removeItem('globalTotal_v5');
+                        localStorage.removeItem('dailyActivity_v5');
+                        localStorage.removeItem('dailyGoal_v6');
+                        localStorage.removeItem('dhikrReminders_v6');
+                        renderSettingsView();
+                    }
                 }
-
-                currentSessionCount = 0;
-                if (!counts[currentDhikr]) counts[currentDhikr] = 0;
-                updateUI();
+                saveData(); updateMainUI();
             });
 
-            targetBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                currentTargetIndex = (currentTargetIndex + 1) % targetOptions.length;
-                currentTarget = targetOptions[currentTargetIndex];
-                localStorage.setItem('masbahaTargetIndex_v5', currentTargetIndex);
-                currentSessionCount = 0; 
-                updateUI();
-            });
-
-            resetBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const resetChoice = prompt("اختر نوع التصفير:\n1 - العداد المركزي فقط\n2 - إجمالي الذكر الحالي\n3 - مسح كافة البيانات (بما فيها سجل النشاط)", "1");
-                if (resetChoice === null) return;
-
-                switch(resetChoice.trim()) {
-                    case "1": 
-                        currentSessionCount = 0; 
-                        break;
-                    case "2":
-                        globalTotal -= counts[currentDhikr];
-                        counts[currentDhikr] = 0;
-                        currentSessionCount = 0;
-                        break;
-                    case "3":
-                        if(confirm("تحذير: هل أنت متأكد من مسح جميع السجلات والنشاط؟")) {
-                            counts = {};
-                            globalTotal = 0;
-                            currentSessionCount = 0;
-                            dailyActivity = {}; // تصفير مصفوفة النشاط
-                            counts[currentDhikr] = 0;
-                            localStorage.removeItem('dhikrCounts_v5');
-                            localStorage.removeItem('globalTotal_v5');
-                            localStorage.removeItem('dailyActivity_v5');
-                        }
-                        break;
-                    default: return;
-                }
-                if (resetChoice.trim() !== "3") saveData();
-                updateUI();
-            });
+            // استدعاء أولي لتحديث الشاشة
+            updateMainUI();
+            renderSettingsView();
         });
     </script>
 </body>
